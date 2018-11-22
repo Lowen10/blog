@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lowen.blog.mapper.BlAdminMapper">
+  <resultMap id="BaseResultMap" type="com.lowen.blog.model.BlAdmin">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="role" jdbcType="INTEGER" property="role" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bl_admin
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.lowen.blog.model.BlAdmin">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into bl_admin (account, password, role
+      )
+    values (#{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lowen.blog.model.BlAdmin">
+    update bl_admin
+    set account = #{account,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      role = #{role,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, account, password, role
+    from bl_admin
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, account, password, role
+    from bl_admin
+  </select>
+  <select id="login" resultMap="BaseResultMap">
+    select id, account, role
+    from bl_admin
+    where account = #{account} and password = #{password}
+  </select>
+  <update id="updatePasswordByPrimaryKey">
+    update bl_admin
+    set password = #{newPass,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER} and password = #{oldPass,jdbcType=VARCHAR}
+  </update>
+</mapper>

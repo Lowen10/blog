@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="description" content="Lowen 个人主页"/>
+    <meta name="author" content="Lowen"/>
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <![endif]-->
+    <title>Lowen 个人主页</title>
+    <link rel="shortcut icon " type="images/x-icon" href="/favicon.ico">
+    <!-- BOOTSTRAP CORE STYLE CSS -->
+    <link href="/front/css/bootstrap.css" rel="stylesheet"/>
+    <!-- FONTAWESOME STYLE CSS -->
+    <link href="/front/css/font-awesome.css" rel="stylesheet"/>
+    <!-- CUSTOM STYLE CSS -->
+    <link href="/front/css/style.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?dd8f7595b66d04170ce97d814339b1ac";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body>
+
+<section class="header-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <a href="/"><img src="${(blProfile.head)!'/front/img/head.jpg'}" class="img-circle img-responsive"/></a>
+            </div>
+            <div class="col-md-5 text-center">
+                <h1><strong>${(blProfile.nickname)!} </strong></h1>
+                <h4>${(blProfile.signature)!}</h4>
+            </div>
+            <div class="col-md-5">
+                <h3>个人简介:</h3>
+
+                ${(blProfile.signature)!}<i><strong>${(blProfile.email)!}</strong></i>
+            </div>
+        </div>
+    </div>
+</section>
+<!--HOME SECTION END-->
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-1 spon-txt">
+                <a href="/"><span>主页</span></a>
+            </div>
+            <#if (blProfile.github)??>
+            <div class="col-md-1 spon-txt">
+                <a href="${(blProfile.github)!}" target="_blank"><span>GitHub</span></a>
+            </div>
+        </#if>
+        <#if (blProfile.csdn)??>
+        <div class="col-md-1 spon-txt">
+            <a href="${(blProfile.csdn)!}" target="_blank"><span>CSDN</span></a>
+        </div>
+    </#if>
+    <#if (blProfile.email)??>
+    <div class="col-md-1 spon-txt">
+        <a href="mailto:${(blProfile.email)!}"><span>E-Mail</span></a>
+    </div>
+</#if>
+</div>
+</div>
+</section>
+<!--SPONSORS SECTION END-->
+<hr/>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>文章分类</strong>
+                    </li>
+                    <#list blCategories as cat>
+                    <li class="list-group-item item" value="${cat.categoryId?c}">
+                        <span class="badge">${cat.articleCount}</span>
+                        ${cat.category}
+                    </li>
+                </#list>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <#if (blArticles.list?size==0) >
+                <div class="blog-main">
+
+                    <div class="blog-txt" align="center">
+                        暂无数据
+                    </div>
+                </div>
+                <#else>
+                <#list blArticles.list as article>
+                <div class="blog-main">
+                    <div class="heading-blog">
+                        <a href="/article/details/${article.id?c}">
+                            ${article.title}
+                        </a>
+                    </div>
+                    <div class="blog-info">
+                        <span class="label label-danger">${article.articleType}</span>
+                        <span class="label label-primary">${article.createTime?string('yyyy年MM月dd日 HH:mm:ss')}</span>
+                        <span class="label label-success">阅读数：${article.readNum}</span>
+                    </div>
+                    <div class="blog-txt">
+                        ${article.introduction}
+                    </div>
+                </div>
+            </#list>
+        </#if>
+        <!--BLOG ONE END -->
+        <nav>
+            <ul class="pagination">
+                <#if blArticles.hasPreviousPage>
+                <li>
+                    <#if categoryId?? >
+                    <a href="/article/list/${categoryId?c}/${blArticles.prePage}">
+                        <#else>
+                        <a href="?page=${blArticles.nextPage}">
+                        </#if>
+                        <#else>
+                <li class="disabled">
+                    <a>
+                    </#if>
+                    <span aria-hidden="true">&laquo;</span><span class="sr-only">Previous</span></a>
+                </li>
+                <#list blArticles.navigatepageNums as nav>
+                <#if nav == blArticles.pageNum>
+                <li class="active"><a>${nav}<span class="sr-only">(current)</span></a></li>
+                <#else>
+                <li>
+                    <#if categoryId??>
+                    <a href="/article/list/${categoryId?c}/${nav}">${nav}<span class="sr-only"></span></a>
+                    <#else>
+                    <a href="?page=${nav}">${nav}<span class="sr-only"></span></a>
+                </#if>
+                </li>
+            </#if>
+        </#list>
+
+        <#if blArticles.hasNextPage>
+        <li>
+            <#if categoryId??>
+            <a href="/article/list/${categoryId?c}/${blArticles.nextPage}">
+                <#else>
+                <a href="?page=${blArticles.nextPage}">
+                </#if>
+                <#else>
+        <li class="disabled">
+            <a>
+            </#if>
+            <span aria-hidden="true">&raquo;</span><span class="sr-only">Next</span></a>
+        </li>
+        </ul>
+        </nav>
+        <!--PAGING  END -->
+    </div>
+
+    </div>
+    </div>
+</section>
+<hr/>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center set-foot">
+            &copy 2018 Lowen
+        </div>
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        $('li.list-group-item').each(function () {
+            $(this).click(function () {
+                if (!$(this).val()) {
+                    return;
+                }
+                window.location.href = "/article/list/" + $(this).val();
+            });
+        });
+    });
+
+</script>
+</body>
+</html>

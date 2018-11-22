@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lowen.blog.mapper.BlProfileMapper">
+  <resultMap id="BaseResultMap" type="com.lowen.blog.model.BlProfile">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="wechat" jdbcType="VARCHAR" property="wechat" />
+    <result column="signature" jdbcType="VARCHAR" property="signature" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="head" jdbcType="VARCHAR" property="head" />
+    <result column="csdn" jdbcType="VARCHAR" property="csdn" />
+    <result column="github" jdbcType="VARCHAR" property="github" />
+    <result column="resume" jdbcType="LONGVARCHAR" property="resume" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bl_profile
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertOrUpdate" parameterType="com.lowen.blog.model.BlProfile">
+    <selectKey keyProperty="count" resultType="int" order="BEFORE">
+      select count(*) as count from bl_profile
+    </selectKey>
+    <if test="count > 0">
+      update bl_profile
+      <set>
+          name= #{name},
+          nickname= #{nickname},
+          introduce= #{introduce},
+          qq= #{qq},
+          wechat= #{wechat},
+          email= #{email},
+          head= #{head},
+          csdn= #{csdn},
+          github= #{github},
+          resume= #{resume}
+      </set>
+    </if>
+    <if test="count==0">
+      insert into bl_profile (name, nickname, introduce,
+      qq, wechat, signature,
+      email, head, csdn,
+      github, resume)
+      values (#{name,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{introduce,jdbcType=VARCHAR},
+      #{qq,jdbcType=VARCHAR}, #{wechat,jdbcType=VARCHAR}, #{signature,jdbcType=VARCHAR},
+      #{email,jdbcType=VARCHAR}, #{head,jdbcType=VARCHAR}, #{csdn,jdbcType=VARCHAR},
+      #{github,jdbcType=VARCHAR}, #{resume,jdbcType=LONGVARCHAR})
+    </if>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.lowen.blog.model.BlProfile">
+    update bl_profile
+    set name = #{name,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      introduce = #{introduce,jdbcType=VARCHAR},
+      qq = #{qq,jdbcType=VARCHAR},
+      wechat = #{wechat,jdbcType=VARCHAR},
+      signature = #{signature,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      head = #{head,jdbcType=VARCHAR},
+      csdn = #{csdn,jdbcType=VARCHAR},
+      github = #{github,jdbcType=VARCHAR},
+      resume = #{resume,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name, nickname, introduce, qq, wechat, signature, email, head, csdn, github, 
+    resume
+    from bl_profile
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectProfile" parameterType="java.lang.Integer" resultType="com.lowen.blog.model.BlProfile">
+     select id, name, nickname, introduce, qq, wechat, signature, email, head, csdn, github, resume
+    from bl_profile order by id asc limit 1
+  </select>
+</mapper>
